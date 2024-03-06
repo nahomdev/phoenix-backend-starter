@@ -23,7 +23,6 @@ export async function startServer(): Promise<void>{
     const port = process.env.PORT || 9001;
 
     server.listen(port, () => {
-        // console.log(`server is up and running on port ${port}`);
         logger.info(`server is up and running on port ${port}`)
     }) 
 }
