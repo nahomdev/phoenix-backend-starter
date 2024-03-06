@@ -38,6 +38,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.startServer = exports.createServer = void 0;
 const app_1 = __importDefault(require("./app"));
 const http = __importStar(require("http"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const logger_1 = require("./logger");
+dotenv_1.default.config({ path: '.env' });
+const logger = (0, logger_1.useLogger)();
 function createServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const server = http.createServer(yield app_1.default);
@@ -48,8 +52,9 @@ exports.createServer = createServer;
 function startServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const server = yield createServer();
-        server.listen(3000, () => {
-            console.log(`server is up and running on port 3000`);
+        const port = process.env.PORT || 9001;
+        server.listen(port, () => {
+            logger.info(`server is up and running on port ${port}`);
         });
     });
 }

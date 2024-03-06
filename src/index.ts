@@ -1,8 +1,14 @@
- import createApp from "./app";
+ 
+import createApp from "./app";
 import * as http from "http";
+import dotenv from 'dotenv';
+import { useLogger } from './logger';
 
+dotenv.config({ path: '.env' }); 
 
-export async function createServer(): Promise<http.Server>{
+const logger = useLogger();
+
+export  async function createServer(): Promise<http.Server>{
 
     const server = http.createServer(await createApp);
 
@@ -10,11 +16,15 @@ export async function createServer(): Promise<http.Server>{
 }
 
 export async function startServer(): Promise<void>{
+
     
     const server = await createServer();
+ 
+    const port = process.env.PORT || 9001;
 
-    server.listen(3000, () => {
-        console.log(`server is up and running on port 3000`)
+    server.listen(port, () => {
+        // console.log(`server is up and running on port ${port}`);
+        logger.info(`server is up and running on port ${port}`)
     }) 
 }
 
