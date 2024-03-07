@@ -14,16 +14,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const logger_1 = require("./logger");
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const app_var = {
+    CORS_ALLOWED_ORIGIN: process.env.CORS_ALLOWED_ORIGIN,
+    MAX_PAYLOAD_SIZE: process.env.MAX_PAYLOAD_SIZE
+};
 function createApp() {
     return __awaiter(this, void 0, void 0, function* () {
-        const app = (0, express_1.default)();
         const logger = (0, logger_1.useLogger)();
-        app.get('/test', (req, res) => {
-            logger.info(req.query);
-            res.send('good!!!');
+        const app = (0, express_1.default)();
+        app.use(express_1.default.json());
+        app.use((0, helmet_1.default)());
+        app.use((0, cookie_parser_1.default)());
+        app.disabled('x-powered-by');
+        app.use((_req, res, next) => {
+            res.setHeader('x-powered-by', 'phoenix');
+            next();
+        });
+        app.use((0, cors_1.default)({
+            origin: app_var.CORS_ALLOWED_ORIGIN,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            credentials: true
+        }));
+        app.get('/greeting', (_req, res) => {
+            res.status(200).json({
+                status: 'success',
+                message: "Hello world!"
+            });
         });
         app.use('*', (req, res) => {
-            res.send('no url dude');
+            logger.error(`unable to find the requested url: ${req.originalUrl} on this server!`);
+            res.status(404).json({
+                status: 'fail',
+                message: `unable to find requested URL ${req.originalUrl} on this server!`
+            });
         });
         return app;
     });

@@ -10,7 +10,7 @@ const logger = useLogger();
 
 export  async function createServer(): Promise<http.Server>{
 
-    const server = http.createServer(await createApp);
+    const server = http.createServer(await createApp());
 
     return server;
 }

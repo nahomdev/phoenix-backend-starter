@@ -44,7 +44,7 @@ dotenv_1.default.config({ path: '.env' });
 const logger = (0, logger_1.useLogger)();
 function createServer() {
     return __awaiter(this, void 0, void 0, function* () {
-        const server = http.createServer(yield app_1.default);
+        const server = http.createServer(yield (0, app_1.default)());
         return server;
     });
 }
