@@ -13,9 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const logger_1 = require("./logger");
 function createApp() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = (0, express_1.default)();
+        const logger = (0, logger_1.useLogger)();
+        app.get('/test', (req, res) => {
+            logger.info(req.query);
+            res.send('good!!!');
+        });
+        app.use('*', (req, res) => {
+            res.send('no url dude');
+        });
         return app;
     });
 }
