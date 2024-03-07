@@ -40,8 +40,10 @@ const app_1 = __importDefault(require("./app"));
 const http = __importStar(require("http"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const logger_1 = require("./logger");
+const useEnv_1 = __importDefault(require("./utils/useEnv"));
 dotenv_1.default.config({ path: '.env' });
 const logger = (0, logger_1.useLogger)();
+const env = (0, useEnv_1.default)();
 function createServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const server = http.createServer(yield (0, app_1.default)());
@@ -52,7 +54,7 @@ exports.createServer = createServer;
 function startServer() {
     return __awaiter(this, void 0, void 0, function* () {
         const server = yield createServer();
-        const port = process.env.PORT || 9001;
+        const port = env.get('PORT');
         server.listen(port, () => {
             logger.info(`server is up and running on port ${port}`);
         });

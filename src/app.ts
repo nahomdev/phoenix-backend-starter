@@ -3,18 +3,16 @@ import { useLogger } from './logger';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-
-const app_var = {
-    CORS_ALLOWED_ORIGIN: process.env.CORS_ALLOWED_ORIGIN,
-    MAX_PAYLOAD_SIZE: process.env.MAX_PAYLOAD_SIZE
-}
+import useEnv from './utils/useEnv';
  
+const logger = useLogger();
+const env = useEnv();
+
 export default async function createApp(): Promise<Express.Application>{
-     const logger = useLogger();
 
     const app = express();
 
-    app.use(express.json());
+    app.use(express.json({ limit: env.get('MAX_PAYLOAD_SIZE')}));
 
     app.use(helmet());
 
@@ -28,7 +26,7 @@ export default async function createApp(): Promise<Express.Application>{
     })
 
     app.use(cors({
-        origin: app_var.CORS_ALLOWED_ORIGIN,
+        origin: env.get('CORS_ALLOWED_ORIGIN'),
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true
     }))

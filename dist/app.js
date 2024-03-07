@@ -17,15 +17,13 @@ const logger_1 = require("./logger");
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const app_var = {
-    CORS_ALLOWED_ORIGIN: process.env.CORS_ALLOWED_ORIGIN,
-    MAX_PAYLOAD_SIZE: process.env.MAX_PAYLOAD_SIZE
-};
+const useEnv_1 = __importDefault(require("./utils/useEnv"));
+const logger = (0, logger_1.useLogger)();
+const env = (0, useEnv_1.default)();
 function createApp() {
     return __awaiter(this, void 0, void 0, function* () {
-        const logger = (0, logger_1.useLogger)();
         const app = (0, express_1.default)();
-        app.use(express_1.default.json());
+        app.use(express_1.default.json({ limit: env.get('MAX_PAYLOAD_SIZE') }));
         app.use((0, helmet_1.default)());
         app.use((0, cookie_parser_1.default)());
         app.disabled('x-powered-by');
@@ -34,7 +32,7 @@ function createApp() {
             next();
         });
         app.use((0, cors_1.default)({
-            origin: app_var.CORS_ALLOWED_ORIGIN,
+            origin: env.get('CORS_ALLOWED_ORIGIN'),
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             credentials: true
         }));
