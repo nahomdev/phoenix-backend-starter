@@ -9,7 +9,6 @@ const logger = useLogger();
 const env = useEnv();
 
 export default async function createApp(): Promise<Express.Application>{
-
     const app = express();
 
     app.use(express.json({ limit: env.get('MAX_PAYLOAD_SIZE')}));
