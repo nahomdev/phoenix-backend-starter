@@ -4,7 +4,7 @@ const pino_var = {
     PINO_LOG_LEVEL: process.env.PINO_LOG_LEVEL,
     PINO_STYLE: process.env.PINO_STYLE
 }
-
+ 
 export const _cache: {
     logger: Logger<never> | undefined,
 } = { logger: undefined };
@@ -22,9 +22,10 @@ export const useLogger = () => {
 }
 
 export const createLogger = () => {
-
+    
+    
     const pinoOptions: LoggerOptions = {
-        level: process.env.PINO_LOG_LEVEL,
+        level: process.env.PINO_LOG_LEVEL || 'info',
     }
 
     if (pino_var.PINO_STYLE !== 'raw') {

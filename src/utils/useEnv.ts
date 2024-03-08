@@ -1,11 +1,12 @@
-import { useLogger } from "src/logger";
-
+import { useLogger } from '../logger';
 interface EnvFunctions {
   get: (key: string, defaultValue?: string | undefined) => string | undefined;
 }
+const logger = useLogger();
 
 export default function useEnv(): EnvFunctions {
-    const logger = useLogger();
+  
+  
     return {
         get: (key, defaultValue = undefined)=> {
             const value = process.env[key] || defaultValue;

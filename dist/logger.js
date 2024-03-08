@@ -17,7 +17,7 @@ const useLogger = () => {
 exports.useLogger = useLogger;
 const createLogger = () => {
     const pinoOptions = {
-        level: process.env.PINO_LOG_LEVEL,
+        level: process.env.PINO_LOG_LEVEL || 'info',
     };
     if (pino_var.PINO_STYLE !== 'raw') {
         pinoOptions.transport = {
